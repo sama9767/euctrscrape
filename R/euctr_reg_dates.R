@@ -30,7 +30,7 @@ euctr_reg_dates <- function (trn) {
     
     dlfile <- tempfile()
 
-    utils::download.file(url, dlfile, method="wget", extra="--no-check-certificate --quiet")
+    utils::download.file(url, dlfile, method="curl", extra="-k")
 
     lines <- readLines(dlfile)
 
