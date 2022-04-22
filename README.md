@@ -8,6 +8,7 @@ Get `euctrscrape` from Github:
 install.packages("devtools")
 library(devtools)
 install_github("bgcarlisle/euctrscrape")
+library(euctrscrape)
 ```
 
 Download registration dates for a EUCTR record:
