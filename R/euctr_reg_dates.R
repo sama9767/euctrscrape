@@ -30,6 +30,8 @@ euctr_reg_dates <- function (trn) {
     
     dlfile <- tempfile()
 
+    ## I'd much prefer to use `polite`, but there's a TLS problem, so
+    ## this is basically the only solution that works
     utils::download.file(url, dlfile, method="curl", extra="-k -s")
 
     lines <- readLines(dlfile)
