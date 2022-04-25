@@ -11,6 +11,7 @@ Imports:
     assertthat,
     dplyr,
     magrittr,
+    rvest,
     stringr,
     utils
 Encoding: UTF-8
