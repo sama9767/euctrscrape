@@ -51,8 +51,6 @@ euctr_start_date <- function (trn, n_retry = 10) {
 
         html <- rvest::read_html(dlfile)
 
-        html
-
         resulttablecells <- html %>%
             rvest::html_nodes("table.result td") %>%
             rvest::html_text2()
