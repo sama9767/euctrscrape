@@ -32,3 +32,23 @@ Download the start date for a EUCTR record:
 > euctr_start_date("2004-000083-27")
 [1] "2004-09-19"
 ```
+
+Get trial results for a EUCTR record:
+
+```
+> euctr_results_posted("2012-001661-32") ## This trial has results
+$trial_results
+[1] TRUE
+
+$pub_date
+[1] "2021-12-13"
+```
+
+```
+> euctr_results_posted("2020-005087-66") ## This trial has no results
+$trial_results
+[1] FALSE
+
+$pub_date
+[1] NA
+```
