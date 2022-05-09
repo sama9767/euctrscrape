@@ -6,9 +6,16 @@
 #' @param trn A character vector containing a EUCTR trial registry
 #'     number
 #'
+#' @param n_retry Integer number of times to try downloading again
+#'     before failing
+#'
 #' @return A list containing a logical TRUE/FALSE indicating whether
 #'     results are posted and a date indicating the first version
 #'     publication date
+#'
+#' @examples
+#' euctr_results_posted("2012-001661-32") ## results
+#' euctr_results_posted("2020-005087-66") ## no results
 #'
 #' @export
 #'
@@ -128,8 +135,6 @@ euctr_results_posted <- function (trn, n_retry = 10) {
         pubdate <- NA
     }
 
-    
-
     to_return <- list(
         trial_results = trial_results,
         pub_date = pubdate
@@ -138,7 +143,3 @@ euctr_results_posted <- function (trn, n_retry = 10) {
     return(to_return)
     
 }
-
-euctr_results_posted("2012-001661-32") ## results
-
-euctr_results_posted("2020-005087-66") ## no results
