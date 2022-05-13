@@ -121,7 +121,7 @@ euctr_details <- function (trn, n_retry = 10) {
 
         inner_retries <- 0
         
-        while(length(resulttablerows & inner_retries < n_retry) == 0) {
+        while(length(resulttablerows) == 0 & inner_retries < n_retry) {
 
             inner_retries <- inner_retries + 1
 
