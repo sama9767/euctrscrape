@@ -9,9 +9,11 @@
 #' @param n_retry Integer number of times to try downloading again
 #'     before failing
 #'
-#' @return A list containing a logical TRUE/FALSE indicating whether
-#'     results are posted and a date indicating the first version
-#'     publication date
+#' @return A list containing: 1. a logical TRUE/FALSE indicating
+#'     whether results are posted, 2. a date indicating the first
+#'     version publication date and 3. the "Global completion date" or
+#'     the "Global end of trial date" if the "Global completion date"
+#'     is not reported, and NA if neither is reported
 #'
 #' @examples
 #' euctr_results_posted("2012-001661-32") ## results
@@ -48,7 +50,12 @@ euctr_results_posted <- function (trn, n_retry = 10) {
 
     resulttablecells <- c()
 
-    while(length(resulttablecells) == 0) {
+    retries <- 0
+    
+    while(length(resulttablecells) == 0 & retries < n_retry) {
+        
+        retries <- retries + 1
+        
         dlfile <- tempfile()
         
         ## I'd much prefer to use `polite`, but there's a TLS problem,
@@ -131,13 +138,67 @@ euctr_results_posted <- function (trn, n_retry = 10) {
             
         }
 
+        gcdate <- NA
+
+        for (resrow in resulttablerows) {
+
+            resrow <- gsub("[\n\r]", "", resrow)
+
+            resrow <- resrow %>%
+                stringr::str_extract(
+                             "^Global completion date(.*)+"
+                         )
+
+            if (! is.na(resrow)) {
+                gcdate <- sub(
+                    "^Global completion date(.*)",
+                    "\\1",
+                    resrow
+                ) %>%
+                    trimws() %>%
+                    as.Date(format="%d %b %Y") %>%
+                    as.character()
+                
+            }
+            
+        }
+
+        if (is.na(gcdate)) {
+
+            for (resrow in resulttablerows) {
+
+                resrow <- gsub("[\n\r]", "", resrow)
+
+                resrow <- resrow %>%
+                    stringr::str_extract(
+                                 "^Global end of trial date(.*)+"
+                             )
+
+                if (! is.na(resrow)) {
+                    gcdate <- sub(
+                        "^Global end of trial date(.*)",
+                        "\\1",
+                        resrow
+                    ) %>%
+                        trimws() %>%
+                        as.Date(format="%d %b %Y") %>%
+                        as.character()
+                    
+                }
+                
+            }
+            
+        }
+
     } else {
         pubdate <- NA
+        gcdate <- NA
     }
 
     to_return <- list(
         trial_results = trial_results,
-        pub_date = pubdate
+        pub_date = pubdate,
+        global_completion_date = gcdate
     )
 
     return(to_return)

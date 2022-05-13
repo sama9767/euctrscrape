@@ -14,9 +14,11 @@ number}
 before failing}
 }
 \value{
-A list containing a logical TRUE/FALSE indicating whether
-results are posted and a date indicating the first version
-publication date
+A list containing: 1. a logical TRUE/FALSE indicating
+whether results are posted, 2. a date indicating the first
+version publication date and 3. the "Global completion date" or
+the "Global end of trial date" if the "Global completion date"
+is not reported, and NA if neither is reported
 }
 \description{
 Retrieves the date that results were first posted if
