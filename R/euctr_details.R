@@ -17,8 +17,8 @@
 #'     is reported
 #'
 #' @examples
-#' euctr_results_posted("2012-001661-32") ## results
-#' euctr_results_posted("2020-005087-66") ## no results
+#' euctr_details("2012-001661-32") ## results
+#' euctr_details("2020-005087-66") ## no results
 #'
 #' @export
 #'
