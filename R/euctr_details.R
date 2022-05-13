@@ -87,6 +87,8 @@ euctr_details <- function (trn, n_retry = 10) {
 
     ## Get the start date
 
+    startdate <- NA
+
     for (rcell in resulttablecells) {
 
         rcell <- rcell %>%
