@@ -1,19 +1,20 @@
-#' @title euctr_results_posted
+#' @title euctr_details
 #'
-#' @description Retrieves the date that results were first posted if
-#'     there is a link to trial results for a EUCTR entry
+#' @description Retrieves the start date, whether results were posted,
+#'     the publication date and the completion date for a EUCTR entry
 #'
 #' @param trn A character vector containing a EUCTR trial registry
 #'     number
 #'
 #' @param n_retry Integer number of times to try downloading again
-#'     before failing
+#'     before failing, default 10
 #'
 #' @return A list containing: 1. a logical TRUE/FALSE indicating
-#'     whether results are posted, 2. a date indicating the first
-#'     version publication date and 3. the "Global completion date" or
-#'     the "Global end of trial date" if the "Global completion date"
-#'     is not reported, and NA if neither is reported
+#'     whether results are posted, 2. the trial start date, 3. a date
+#'     indicating the first version publication date and 4. the
+#'     "Global completion date" or the "Global end of trial date" if
+#'     the "Global completion date" is not reported, and NA if neither
+#'     is reported
 #'
 #' @examples
 #' euctr_results_posted("2012-001661-32") ## results
@@ -22,7 +23,7 @@
 #' @export
 #'
 #' @importFrom magrittr "%>%"
-euctr_results_posted <- function (trn, n_retry = 10) {
+euctr_details <- function (trn, n_retry = 10) {
 
     ## Check for well-formed input
     assertthat::assert_that(
@@ -83,6 +84,27 @@ euctr_results_posted <- function (trn, n_retry = 10) {
             trial_results <- TRUE
         }
     }
+
+    ## Get the start date
+
+    for (rcell in resulttablecells) {
+
+        rcell <- rcell %>%
+            stringr::str_extract(
+                         "^Start Date.: [0-9]{4}-[0-9]{2}-[0-9]{2}$"
+                     )
+
+        if (! is.na(rcell)) {
+            
+            startdate <- sub(
+                "^Start Date.: ([0-9]{4}-[0-9]{2}-[0-9]{2})$",
+                "\\1",
+                rcell
+            )
+            
+        }
+
+    }
     
     ## Now get the date of first results publication
 
@@ -97,7 +119,11 @@ euctr_results_posted <- function (trn, n_retry = 10) {
 
         resulttablerows <- c()
 
-        while(length(resulttablerows) == 0) {
+        inner_retries <- 0
+        
+        while(length(resulttablerows & inner_retries < n_retry) == 0) {
+
+            inner_retries <- inner_retries + 1
 
             dlfile <- tempfile()
             
@@ -196,6 +222,8 @@ euctr_results_posted <- function (trn, n_retry = 10) {
     }
 
     to_return <- list(
+        trn = trn,
+        start_date = startdate,
         trial_results = trial_results,
         pub_date = pubdate,
         global_completion_date = gcdate
