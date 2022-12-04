@@ -217,10 +217,74 @@ euctr_details <- function (trn, n_retry = 10) {
             }
             
         }
+        
+        # Get CT.gov number from the results, if available
+        
+        ctg_id <- NA
+        
+        for (resrow in resulttablerows) {
+            
+            resrow <- gsub("[\n\r]", "", resrow)
+            
+            resrow <- resrow %>%
+                stringr::str_extract(
+                    "^US NCT number(.*)+"
+                )
+            
+            if (! is.na(resrow)) {
+                ctg_id <- sub(
+                    "^US NCT number(.*)",
+                    "\\1",
+                    resrow
+                ) %>%
+                    trimws() %>%
+                    trimws(whitespace = "[ -]") %>%
+                    as.character()
+                
+                if (ctg_id == "") {
+                    ctg_id <- NA
+                }
+                
+            }
+            
+        }
+        
+        # Get ISRCTN number from the results, if available
+        
+        isrctn_id <- NA
+        
+        for (resrow in resulttablerows) {
+            
+            resrow <- gsub("[\n\r]", "", resrow)
+            
+            resrow <- resrow %>%
+                stringr::str_extract(
+                    "^ISRCTN number(.*)+"
+                )
+            
+            if (! is.na(resrow)) {
+                isrctn_id <- sub(
+                    "^ISRCTN number(.*)",
+                    "\\1",
+                    resrow
+                ) %>%
+                    trimws() %>%
+                    trimws(whitespace = "[ -]") %>%
+                    as.character()
+                
+                if (isrctn_id == "") {
+                    isrctn_id <- NA
+                }
+                
+            }
+            
+        }
 
     } else {
         pubdate <- NA
         gcdate <- NA
+        ctg_id <- NA
+        isrctn_id <- NA
     }
 
     to_return <- list(
@@ -228,7 +292,10 @@ euctr_details <- function (trn, n_retry = 10) {
         start_date = startdate,
         trial_results = trial_results,
         pub_date = pubdate,
-        global_completion_date = gcdate
+        global_completion_date = gcdate,
+        ctg_identifier = ctg_id,
+        isrctn_identifier = isrctn_id
+        
     )
 
     return(to_return)
