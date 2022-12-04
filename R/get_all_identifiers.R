@@ -8,8 +8,6 @@ source(here("R", "euctr_details.R"))
 source(here("R", "euctr_reg_identifiers.R"))
 source(here("R", "combine_identifiers.R"))
 
-function(get_ids_for_trials)
-
 # Update input file name here (ids from EU Trials Tracker)
 data <- read_csv(here("data", "2022-12-03_charite-euctr-trials.csv"))
 
