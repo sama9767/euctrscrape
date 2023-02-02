@@ -43,7 +43,8 @@ euctr_reg_identifiers <- function (trn) {
     
     # Search for a CT.gov identifier
     for (line in lines) {
-        if (grepl("A\\.5\\.2 US NCT \\(ClinicalTrials\\.gov registry\\) number: (?i)NCT\\W*0\\d{7}", line)) {
+        m <- str_match(line, "A\\.5\\.2 US NCT \\(ClinicalTrials\\.gov registry\\) number: (.+)")
+        if (!is.na(m[2])) {
             
             if (!is.na(ctg_identifier)) {
                 print("More than one NCT identifier found!")
@@ -51,7 +52,7 @@ euctr_reg_identifiers <- function (trn) {
                 break
             }
             
-            ctg_identifier <- stringr::str_extract(line, "(?i)NCT\\W*0\\d{7}")
+            ctg_identifier <- m[2]
         }
     }
 
