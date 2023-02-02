@@ -31,7 +31,7 @@ get_ids <- function(trial) {
   # First column: EUCTR trial identifier
   # Second column: identifier found
   # Third column: response field the identifier was found in (US NCT number | ISRCTN number | other)
-  # Fourth column provenance of the identifier found (download | results_page)
+  # Fourth column provenance of the identifier found (protocol | results)
   # Output: dataframe with 4 rows per EUCTR trial
   
   found_ids <- data.frame(
@@ -41,18 +41,18 @@ get_ids <- function(trial) {
     provenance=character()
   )
 
-  # Get identifiers from Full Trial Details download
+  # Get identifiers from the Protocol
   ids <- euctr_reg_identifiers(trial)
   
   found_ids <- found_ids %>%
     add_row(euctr_id = trial,
             other_id = ids[1],
             field="US NCT number",
-            provenance = "download") %>%
+            provenance = "protocol") %>%
     add_row(euctr_id = trial,
             other_id = ids[2],
             field = "other",
-            provenance = "downlaod")
+            provenance = "protocol")
   
   # Get identifiers from the Results page (if available)
   rp_ids <- euctr_details(trial)
@@ -64,11 +64,11 @@ get_ids <- function(trial) {
     add_row(euctr_id = trial,
             other_id = rp_id_ctg,
             field = "US NCT number",
-            provenance = "results_page") %>%
+            provenance = "results") %>%
     add_row(euctr_id = trial,
             other_id = rp_id_isrctn,
             field = "ISRCTN number",
-            provenance = "results_page")
+            provenance = "results")
   
   
   return(found_ids)

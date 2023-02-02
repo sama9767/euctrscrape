@@ -1,6 +1,6 @@
 #' @title euctr_reg_identifiers
 #'
-#' @description Retrieves other identifiers for a EUCTR entry
+#' @description Retrieves other identifiers for a EUCTR entry from the protocol
 #'
 #' @param trn A character vector containing a EUCTR trial registry
 #'     number
