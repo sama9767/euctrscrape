@@ -46,7 +46,7 @@ euctr_full_title <- function (trn) {
     if(!is.na(full_title[2])){
       if(length(full_title > 1)){
         print("More than one full title found!")
-        print(full_title[2])
+        print(full_title)
         break
       }
       print(full_title[2])
