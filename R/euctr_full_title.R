@@ -22,13 +22,13 @@ euctr_full_title <- function (trn) {
   )
   
   url <- paste0(
-   "https://www.clinicaltrialsregister.eu/",
+    "https://www.clinicaltrialsregister.eu/",
     "ctr-search/rest/download/full?query=",
     trn,
     "&mode=current_page"
   )
   
-
+  
   dlfile <- tempfile()
   
   ## I'd much prefer to use `polite`, but there's a TLS problem, so
@@ -37,18 +37,26 @@ euctr_full_title <- function (trn) {
   
   lines <- readLines(dlfile)
   
-  full_title <- NA
 
- 
- # Search for a "full title of the trial"
- for (line in lines) {
-  if(str_detect(line,pattern = fixed("A.3 Full title of the trial: "))){
-    full_title <- str_extract(line, pattern = "*:.")
-    }
-        
+  
+  
+  # Search for a "full title of the trial"
+  for (line in lines) {
+    full_title <- str_match(line,"A.3 Full title of the trial:(.+)")
+    if(!is.na(full_title[2])){
+      if(length(full_title > 1)){
+        print("More than one full title found!")
+        print(full_title[2])
+        break
+      }
+      print(full_title[2])
       
+      
+      
+    }
+    
+    
+  }
+  
 }
-print(full_title)
- }
-
 
