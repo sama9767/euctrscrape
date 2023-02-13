@@ -37,26 +37,32 @@ euctr_full_title <- function (trn) {
   
   lines <- readLines(dlfile)
   
-
   
+  full_title <- NA
   
   # Search for a "full title of the trial"
+  
   for (line in lines) {
-    full_title <- str_match(line,"A.3 Full title of the trial:(.+)")
-    if(!is.na(full_title[2])){
-      if(length(full_title > 1)){
-        print("More than one full title found!")
+    m <- str_match(line,"A\\.3 Full title of the trial:(.+)")
+    
+    if(!is.na(m[2])){
+      if(!is.na(full_title)){
+        print("More than one full title found")
         print(full_title)
         break
+        
       }
-      print(full_title[2])
       
+      full_title <- m[2]
       
       
     }
     
     
   }
-  
+  return(full_title)
 }
+
+
+    
 
